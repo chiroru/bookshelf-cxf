@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:aop="http://www.springframework.org/schema/aop"
+  xmlns:security="http://www.springframework.org/schema/security"
+  xmlns:jaxrs="http://cxf.apache.org/jaxrs"
+  xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.2.xsd
+    http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-3.2.xsd
+    http://www.springframework.org/schema/security  http://www.springframework.org/schema/security/spring-security-3.1.xsd
+    http://cxf.apache.org/jaxrs http://cxf.apache.org/schemas/jaxrs.xsd">
+
+  <import resource="classpath:META-INF/cxf/cxf.xml" />
+  <import resource="classpath:META-INF/cxf/cxf-servlet.xml" />
+
+  <jaxrs:server id="bookshelfService" address="/">
+    <jaxrs:serviceBeans>
+      <ref bean="bookshelfWebResource" />
+    </jaxrs:serviceBeans>
+    <jaxrs:providers>
+      <bean class="demo.jaxrs.service.SecurityExceptionMapper" />
+    </jaxrs:providers>
+  </jaxrs:server>
+
+  <bean id="bookshelfWebResource" class="jp.ddo.chiroru.bookshelf.spring.BookshelfWebResourceImpl" />
+
+  <security:global-method-security
+    secured-annotations="enabled">
+    <security:protect-pointcut
+      expression="execution(* jp.ddo.chiroru.bookshelf.spring.getBookshelf(*))"
+      access="ROLE_CUSTOMER, ROLE_ADMIN" />
+    <security:protect-pointcut
+      expression="execution(* jp.ddo.chiroru.bookshelf.spring.addBookshelf(*))"
+      access="ROLE_ADMIN" />
+    <security:protect-pointcut
+      expression="execution(* jp.ddo.chiroru.bookshelf.spring.updateBookshelf(Ljp.ddo.chiroru.bookshelf.spring.Bookshelf))"
+      access="ROLE_ADMIN" />
+    <security:protect-pointcut
+      expression="execution(* jp.ddo.chiroru.bookshelf.spring.deleteBookshelf(*))"
+      access="ROLE_ADMIN" />
+  </security:global-method-security>
+
+  <security:http auto-config='true'>
+    <security:http-basic />
+  </security:http>
+
+  <security:authentication-manager>
+    <security:authentication-provider>
+      <security:user-service>
+        <security:user name="bob" password="bobspassword"
+          authorities="ROLE_CUSTOMER" />
+        <security:user name="fred" password="fredspassword"
+          authorities="ROLE_CUSTOMER, ROLE_ADMIN" />
+      </security:user-service>
+    </security:authentication-provider>
+  </security:authentication-manager>
+</beans>
