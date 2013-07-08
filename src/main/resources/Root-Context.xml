@@ -15,9 +15,9 @@
     <jaxrs:serviceBeans>
       <ref bean="bookshelfWebResource" />
     </jaxrs:serviceBeans>
-    <jaxrs:providers>
+<!--     <jaxrs:providers>
       <bean class="demo.jaxrs.service.SecurityExceptionMapper" />
-    </jaxrs:providers>
+    </jaxrs:providers> -->
   </jaxrs:server>
 
   <bean id="bookshelfWebResource" class="jp.ddo.chiroru.bookshelf.spring.BookshelfWebResourceImpl" />
@@ -25,16 +25,16 @@
   <security:global-method-security
     secured-annotations="enabled">
     <security:protect-pointcut
-      expression="execution(* jp.ddo.chiroru.bookshelf.spring.getBookshelf(*))"
-      access="ROLE_CUSTOMER, ROLE_ADMIN" />
+      expression="execution(* jp.ddo.chiroru.bookshelf.spring.BookshelfWebResource.getBookshelf(*))"
+      access="ROLE_CUSTOMER,ROLE_ADMIN" />
     <security:protect-pointcut
-      expression="execution(* jp.ddo.chiroru.bookshelf.spring.addBookshelf(*))"
+      expression="execution(* jp.ddo.chiroru.bookshelf.spring.BookshelfWebResource.addBookshelf(*))"
       access="ROLE_ADMIN" />
     <security:protect-pointcut
-      expression="execution(* jp.ddo.chiroru.bookshelf.spring.updateBookshelf(Ljp.ddo.chiroru.bookshelf.spring.Bookshelf))"
+      expression="execution(* jp.ddo.chiroru.bookshelf.spring.BookshelfWebResource.updateBookshelf(*))"
       access="ROLE_ADMIN" />
     <security:protect-pointcut
-      expression="execution(* jp.ddo.chiroru.bookshelf.spring.deleteBookshelf(*))"
+      expression="execution(* jp.ddo.chiroru.bookshelf.spring.BookshelfWebResource.deleteBookshelf(*))"
       access="ROLE_ADMIN" />
   </security:global-method-security>
 
@@ -48,7 +48,7 @@
         <security:user name="bob" password="bobspassword"
           authorities="ROLE_CUSTOMER" />
         <security:user name="fred" password="fredspassword"
-          authorities="ROLE_CUSTOMER, ROLE_ADMIN" />
+          authorities="ROLE_CUSTOMER,ROLE_ADMIN" />
       </security:user-service>
     </security:authentication-provider>
   </security:authentication-manager>
