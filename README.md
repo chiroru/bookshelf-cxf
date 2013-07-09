@@ -12,3 +12,4 @@ bookshelf-cxf
 * http://www.slideshare.net/zephiransas/cucumberjvm
 * http://www.slideshare.net/guestd4898b/maven2
 
+jettison
